@@ -2,7 +2,8 @@
 
 using namespace std;
 
-void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena);
+void watchCore(vector<Character*> Core, int& counter);
+void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int& counter);
 void launchHunt(Character& agent, vector<Character*>& hackTeam, vector<Character*>& core, Arena& Arena);
 
 Arena::Arena() {
@@ -30,23 +31,24 @@ Arena::~Arena() {
 
 void Arena::startBreach() {
 	system("cls");
+	srand(time(NULL));
 	auto startNeuroTimer = chrono::steady_clock::now();
 	int x = 0;
-	thread Haxxor1(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
-	thread Haxxor2(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
-	thread Haxxor3(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
-	thread Haxxor4(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
-	thread Haxxor5(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x = 0;
+	int counter = 0;
+	thread CoreWatch(watchCore, ref(Core), ref(counter));
+	thread Haxxor1(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter)); x++;
+	thread Haxxor2(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter)); x++;
+	thread Haxxor3(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter)); x++;
+	thread Haxxor4(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter)); x++;
+	thread Haxxor5(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter)); x = 0;
 	thread Agent1(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); x++;
-	thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this));
+	thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); 
+	CoreWatch.join();
 	Haxxor1.join();
 	Haxxor2.join();
 	Haxxor3.join();
 	Haxxor4.join();
 	Haxxor5.join();
-	Core[0]->lockChar.lock();
-	Core[0]->setStatus(false);
-	Core[0]->lockChar.unlock();
 	Agent1.join();
 	Agent2.join();
 
@@ -55,38 +57,46 @@ void Arena::startBreach() {
 		sum += hackTeam[i]->getNum();
 	}
 
-	cout << "Server HP = " << Core[0]->getHP() << endl;
-	cout << "Collective points = " << sum << endl;
+	cout << "\nServer HP = " << Core[0]->getHP() << endl;
+	cout << "Collective points = " << sum << "\n\nHacker Team" << endl;
 	for (int i = 0; i < numHaxxers; i++) {
 		cout << hackTeam[i]->getName() << " made " << hackTeam[i]->getNum() << " points" << endl; 
 		cout << "HP left = " << hackTeam[i]->getHP() << endl;
 	}
+	cout << endl << "Security Team" << endl;
+	for (int i = 0; i < numAgents; i++) {
+		cout << secTeam[i]->getName() << " made " << secTeam[i]->getNum() << " points" << endl;
+	}
+	cout << endl;
 	auto endTimer = chrono::steady_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(endTimer - startNeuroTimer).count();
 	cout << "Runtime - Neuromancer: " << elapsed << " ms" << endl;
 
 }
 
-void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena) {
-	random_device generator;
-	core[0]->lockChar.lock();
-	int serverStatus = core[0]->getStatus();
-	core[0]->lockChar.unlock();
-	//hacker.lockChar.lock();
-	int hackerStatus = hacker.getStatus();
-	//hacker.lockChar.unlock();
-	while (hackerStatus && serverStatus) {
-		//Arena.lockArena.lock();
+void watchCore(vector<Character*> Core, int& counter) {
+	while (counter != 5) {
+		//keep looping
+	}
+	Core[0]->lockChar.lock();
+	Core[0]->setStatus(false);
+	Core[0]->lockChar.unlock();
+}
+
+void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int& counter) {
+	//random_device generator;
+	while (hacker.getStatus() && core[0]->getStatus()) {
+		hacker.lockChar.lock();
 		hacker.setTarget(core);
-		//Arena.lockArena.unlock();
-		if (generator() % 100 == 0) {
+		hacker.lockChar.unlock();
+		if (rand() % 100 == 0) {
 			hacker.lockChar.lock();
 			hacker.setHP(hacker.getHP() - 5);
 			hacker.lockChar.unlock();
-			/*Arena.lockArena.lock();
+			Arena.lockArena.lock();
 			cout << hacker.getName() << " failed critically!" << endl;
 			cout << "Hacker HP = " << hacker.getHP() << " | Attack Value = " << hacker.getAttVal() << endl;
-			Arena.lockArena.unlock();*/
+			Arena.lockArena.unlock();
 		}
 		else {
 			bool success = hacker.attack(*core[0]);
@@ -119,44 +129,30 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena) {
 		}
 
 		hacker.lockChar.unlock();
-		core[0]->lockChar.lock();
-		serverStatus = core[0]->getStatus();
-		core[0]->lockChar.unlock();
-		//hacker.lockChar.lock();
-		hackerStatus = hacker.getStatus();
-		//hacker.lockChar.unlock();
 	}
+	Arena.lockArena.lock();
+	counter++;
+	Arena.lockArena.unlock();
 }
 
 void launchHunt(Character& agent, vector<Character*>& hackTeam, vector<Character*>& core, Arena& Arena) {
-	random_device generator;
-	core[0]->lockChar.lock();
-	int serverStatus = core[0]->getStatus();
-	core[0]->lockChar.unlock();
-	//agent.lockChar.lock();
-	Hacker* hackerTarget = (Hacker*) agent.getTarget();
-	int hackerStatus = hackerTarget->getStatus();
-	//agent.lockChar.unlock();
-	while (hackerStatus && serverStatus) {
-		if (generator() % 100 < -1) {
-			agent.setTarget(hackTeam);
-			agent.attack(*hackerTarget);
-			Arena.lockArena.lock();
-			cout << agent.getName() << " succesful attack on " << hackerTarget->getName() << endl;
-			cout << hackerTarget->getName() << " HP = " << hackerTarget->getHP() << endl;
-			Arena.lockArena.unlock();
+	//random_device generator;
+	while (core[0]->getStatus()) {
+		agent.setTarget(hackTeam);
+		Hacker* hackerTarget = (Hacker*)agent.getTarget();
+		if (rand() % 100 < 5) {
+			hackerTarget->lockChar.lock();
+			if (hackerTarget->getHP() > 0) {
+				bool killCheck = false;
+				killCheck = agent.attack(*hackerTarget);
+				if (killCheck) {
+					Arena.lockArena.lock();
+					cout << agent.getName() << " eliminated " << hackerTarget->getName() << " | Points: "<< agent.getNum() << endl;
+					Arena.lockArena.unlock();
+				}
+			}
+			hackerTarget->lockChar.unlock();
 		}
-		else {
-			Arena.lockArena.lock();
-			cout << agent.getName() << " failed attack on " << hackerTarget->getName() << endl;
-			Arena.lockArena.unlock();
-		}
-		core[0]->lockChar.lock();
-		serverStatus = core[0]->getStatus();
-		core[0]->lockChar.unlock();
-		hackerTarget->lockChar.lock();
-		hackerStatus = hackerTarget->getStatus();
-		hackerTarget->lockChar.unlock();
 	}
 }
 

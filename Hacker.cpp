@@ -3,7 +3,7 @@
 Hacker::Hacker(int x) {
 	std::string nameArr[] = { "HackerMan", "HackerWoman", "xXx_HaxxLord_xXx", "OwO_Snuggle", "MasterBaiter_xD"};
 	name = nameArr[x];
-	hp = 100;
+	hp = 1000;
 	attVal = 20;
 	points = 0;
 	std::cout << name << " the Hacker has been created!" << std::endl;
@@ -30,7 +30,13 @@ bool Hacker::attack(Character& target) {
 	periTarget->lockChar.unlock();
 	if (attVal + pressure > defVal) {
 		target.lockChar.lock();
-		target.setHP(target.getHP() - 1);
+		if (target.getStatus() == true) {
+			target.setHP(target.getHP() - 1);
+		}
+		else {
+			target.lockChar.unlock();
+			return false;
+		}
 		if (target.getHP() <= 0) {
 			target.setStatus(false);
 		}
@@ -38,10 +44,10 @@ bool Hacker::attack(Character& target) {
 		int diff = attVal + pressure - defVal;
 		periTarget->lockChar.lock();
 		periTarget->zeroPres();
-		periTarget->setDef(periTarget->getDef() + 3);
+		periTarget->setDef(periTarget->getDef() + 1);
 		periTarget->lockChar.unlock();
-		//cout << name << " First" << endl;
 		points++;
+		attVal++;
 		attVal++;
 		while (diff > 0) {
 			target.lockChar.lock();

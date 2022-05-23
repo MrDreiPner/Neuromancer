@@ -12,9 +12,7 @@ Agent::~Agent() {
 
 void Agent::setTarget(std::vector<Character*>& targetList) {
 	random_device generator;
-	do {
-		hackTarget = (Hacker*)targetList[generator() % 5];
-	} while (hackTarget->getStatus() != true);
+	hackTarget = (Hacker*)targetList[generator() % 5];
 }
 
 Character* Agent::getTarget() {
@@ -22,6 +20,12 @@ Character* Agent::getTarget() {
 }
 
 bool Agent::attack(Character& target) {
-	
-	return 0;
+	bool killCheck = false;
+	hackTarget->setHP(target.getHP() - 1);
+	if (hackTarget->getHP() <= 0) {
+		hackTarget->setStatus(false);
+		killCheck = true;
+	}
+	points++;
+	return killCheck;
 }
