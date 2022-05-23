@@ -16,8 +16,7 @@ public:
 	Character* getTarget() override;
 	bool attack(Character& target) override;
 	int getNum() { return numDefZones; };
-	Character* getPeri(int x) { return DefZones[x]; };
-	void relocateDefense();
+	Character* getTarget(int x) { return DefZones[x]; };
 	string getName() { return name; };
 
 private:

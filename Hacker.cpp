@@ -15,7 +15,7 @@ Hacker::~Hacker() {
 
 void Hacker::setTarget(std::vector<Character*>& targetList) {
 	random_device generator;
-	periTarget = (Perimeter*) targetList[0]->getPeri(generator() % 5);
+	periTarget = (Perimeter*) targetList[0]->getTarget(generator() % 5);
 	//cout << "Defzone " << periTarget->getName() << " targeted by " << this->getName() << endl;
 }
 
@@ -40,13 +40,14 @@ bool Hacker::attack(Character& target) {
 		periTarget->zeroPres();
 		periTarget->setDef(periTarget->getDef() + 3);
 		periTarget->lockChar.unlock();
+		//cout << name << " First" << endl;
 		points++;
 		attVal++;
 		while (diff > 0) {
 			target.lockChar.lock();
 			for (int i = 0; i < target.getNum(); i++) {
 				if (diff > 0) {
-					Perimeter* diffPeri = (Perimeter*)target.getPeri(i);
+					Perimeter* diffPeri = (Perimeter*)target.getTarget(i);
 					if (i != periTarget->getID() && diffPeri->getDef() > 0) {
 						diffPeri->lockChar.lock();
 						diffPeri->decrDef();

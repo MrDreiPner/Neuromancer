@@ -28,7 +28,3 @@ Character* Server::getTarget() {
 bool Server::attack(Character& target) {
 	return 0;
 }
-
-void Server::relocateDefense() {
-
-}

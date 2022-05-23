@@ -5,6 +5,7 @@
 #include <string>
 #include <thread>
 #include <random>
+#include <conio.h>
 #include "Arena.h"
 #include "Character.h"
 #include "Hacker.h"

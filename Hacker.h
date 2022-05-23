@@ -17,7 +17,7 @@ public:
 	void setTarget(vector<Character*>& targetList) override;
 	Character* getTarget() override;
 	bool attack(Character& target) override;
-	virtual Character* getPeri(int x) { return periTarget; };
+	Character* getTarget(int x) { return periTarget; };
 	int getNum() { return points; };
 	string getName() { return name; };
 

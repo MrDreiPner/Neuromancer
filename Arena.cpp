@@ -3,7 +3,7 @@
 using namespace std;
 
 void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena);
-void launchHunt(Character& agent, vector<Character*>& hackTeam, Arena& Arena);
+void launchHunt(Character& agent, vector<Character*>& hackTeam, vector<Character*>& core, Arena& Arena);
 
 Arena::Arena() {
 	Core.push_back(new Server(0));
@@ -13,6 +13,8 @@ Arena::Arena() {
 	for (int i = 0; i < numAgents; i++) {
 		secTeam.push_back(new Agent(i));
 	}
+	cout << "\nPress any button to start Neuromancing!" << endl;
+	char dummy = _getch();
 }
 
 Arena::~Arena() {
@@ -27,21 +29,26 @@ Arena::~Arena() {
 }
 
 void Arena::startBreach() {
+	system("cls");
+	auto startNeuroTimer = chrono::steady_clock::now();
 	int x = 0;
 	thread Haxxor1(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
 	thread Haxxor2(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
 	thread Haxxor3(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
 	thread Haxxor4(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x++;
 	thread Haxxor5(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this)); x = 0;
-	//thread Agent1(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(*this)); x++;
-	//thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(*this));
+	thread Agent1(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); x++;
+	thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this));
 	Haxxor1.join();
 	Haxxor2.join();
 	Haxxor3.join();
 	Haxxor4.join();
 	Haxxor5.join();
-	//Agent1.join();
-	//Agent2.join();
+	Core[0]->lockChar.lock();
+	Core[0]->setStatus(false);
+	Core[0]->lockChar.unlock();
+	Agent1.join();
+	Agent2.join();
 
 	int sum = 0;
 	for (int i = 0; i < numHaxxers; i++) {
@@ -54,6 +61,9 @@ void Arena::startBreach() {
 		cout << hackTeam[i]->getName() << " made " << hackTeam[i]->getNum() << " points" << endl; 
 		cout << "HP left = " << hackTeam[i]->getHP() << endl;
 	}
+	auto endTimer = chrono::steady_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(endTimer - startNeuroTimer).count();
+	cout << "Runtime - Neuromancer: " << elapsed << " ms" << endl;
 
 }
 
@@ -62,9 +72,9 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena) {
 	core[0]->lockChar.lock();
 	int serverStatus = core[0]->getStatus();
 	core[0]->lockChar.unlock();
-	hacker.lockChar.lock();
+	//hacker.lockChar.lock();
 	int hackerStatus = hacker.getStatus();
-	hacker.lockChar.unlock();
+	//hacker.lockChar.unlock();
 	while (hackerStatus && serverStatus) {
 		//Arena.lockArena.lock();
 		hacker.setTarget(core);
@@ -80,7 +90,7 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena) {
 		}
 		else {
 			bool success = hacker.attack(*core[0]);
-			Character* currTarg = hacker.getPeri(0);
+			Character* currTarg = hacker.getTarget(0);
 			Perimeter* perTarg = (Perimeter*)currTarg;
 			/*Arena.lockArena.lock();
 			hacker.lockChar.lock();
@@ -112,13 +122,41 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena) {
 		core[0]->lockChar.lock();
 		serverStatus = core[0]->getStatus();
 		core[0]->lockChar.unlock();
-		hacker.lockChar.lock();
+		//hacker.lockChar.lock();
 		hackerStatus = hacker.getStatus();
-		hacker.lockChar.unlock();
+		//hacker.lockChar.unlock();
 	}
 }
 
-void launchHunt(Character& agent, vector<Character*>& hackTeam, Arena& Arena) {
-
+void launchHunt(Character& agent, vector<Character*>& hackTeam, vector<Character*>& core, Arena& Arena) {
+	random_device generator;
+	core[0]->lockChar.lock();
+	int serverStatus = core[0]->getStatus();
+	core[0]->lockChar.unlock();
+	//agent.lockChar.lock();
+	Hacker* hackerTarget = (Hacker*) agent.getTarget();
+	int hackerStatus = hackerTarget->getStatus();
+	//agent.lockChar.unlock();
+	while (hackerStatus && serverStatus) {
+		if (generator() % 100 < -1) {
+			agent.setTarget(hackTeam);
+			agent.attack(*hackerTarget);
+			Arena.lockArena.lock();
+			cout << agent.getName() << " succesful attack on " << hackerTarget->getName() << endl;
+			cout << hackerTarget->getName() << " HP = " << hackerTarget->getHP() << endl;
+			Arena.lockArena.unlock();
+		}
+		else {
+			Arena.lockArena.lock();
+			cout << agent.getName() << " failed attack on " << hackerTarget->getName() << endl;
+			Arena.lockArena.unlock();
+		}
+		core[0]->lockChar.lock();
+		serverStatus = core[0]->getStatus();
+		core[0]->lockChar.unlock();
+		hackerTarget->lockChar.lock();
+		hackerStatus = hackerTarget->getStatus();
+		hackerTarget->lockChar.unlock();
+	}
 }
 

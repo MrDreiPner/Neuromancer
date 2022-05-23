@@ -11,13 +11,17 @@ Agent::~Agent() {
 }
 
 void Agent::setTarget(std::vector<Character*>& targetList) {
-
+	random_device generator;
+	do {
+		hackTarget = (Hacker*)targetList[generator() % 5];
+	} while (hackTarget->getStatus() != true);
 }
 
 Character* Agent::getTarget() {
-	return NULL;
+	return hackTarget;
 }
 
 bool Agent::attack(Character& target) {
+	
 	return 0;
 }

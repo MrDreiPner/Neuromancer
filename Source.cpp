@@ -10,7 +10,7 @@ int main() {
 	delete(HaxFest);
 	auto endTimer = std::chrono::steady_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(endTimer - startTimer).count();
-	std::cout << "Execution time of entire program: " << elapsed << " ms" << std::endl;
+	std::cout << "Runtime - entire program: " << elapsed << " ms" << std::endl;
 	return 0;
 }
 
