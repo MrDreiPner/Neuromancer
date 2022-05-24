@@ -1,9 +1,9 @@
 #include "Hacker.h"
 
 Hacker::Hacker(int x) {
-	std::string nameArr[] = { "HackerMan", "HackerWoman", "xXx_HaxxLord_xXx", "OwO_Snuggle", "MasterBaiter_xD"};
+	std::string nameArr[] = { "HackerMan", "HackerWoman", "xXx_HaxxLord_xXx", "OwO_Snuggle", "MasterH8r_xD"};
 	name = nameArr[x];
-	hp = 1000;
+	hp = 100;
 	attVal = 20;
 	points = 0;
 	std::cout << name << " the Hacker has been created!" << std::endl;
@@ -48,18 +48,17 @@ bool Hacker::attack(Character& target) {
 		periTarget->lockChar.unlock();
 		points++;
 		attVal++;
-		attVal++;
 		while (diff > 0) {
 			target.lockChar.lock();
 			for (int i = 0; i < target.getNum(); i++) {
 				if (diff > 0) {
 					Perimeter* diffPeri = (Perimeter*)target.getTarget(i);
 					if (i != periTarget->getID() && diffPeri->getDef() > 0) {
+						periTarget->lockChar.lock();
 						diffPeri->lockChar.lock();
 						diffPeri->decrDef();
-						diffPeri->lockChar.unlock();
-						periTarget->lockChar.lock();
 						periTarget->incrDef();
+						diffPeri->lockChar.unlock();
 						periTarget->lockChar.unlock();
 						diff--;
 					}
@@ -73,6 +72,9 @@ bool Hacker::attack(Character& target) {
 		lockChar.lock();
 		hp--;
 		lockChar.unlock();
+		target.lockChar.lock();
+		target.setPoints(target.getPoints() + 1);
+		target.lockChar.unlock();
 		periTarget->lockChar.lock();
 		periTarget->incrPres();
 		periTarget->lockChar.unlock();

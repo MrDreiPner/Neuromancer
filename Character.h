@@ -15,6 +15,8 @@ public:
 	virtual string getName() = 0;
 	virtual Character* getTarget(int x) { return NULL; };
 	virtual int getNum() { return NULL; };
+	virtual void setPoints(int x) { points = x; };
+	virtual int getPoints() { return points; };
 	int getHP() { return hp; };
 	void setHP(int x) { hp = x; };
 	int getAttVal() { return attVal; };
@@ -28,5 +30,6 @@ protected:
 	int hp = 0;
 	int attVal = 0;
 	bool active = true;
+	int points = 0;
 };
 

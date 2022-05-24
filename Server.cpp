@@ -2,7 +2,7 @@
 
 Server::Server(int x) {
 	name = "Mother_Core";
-	hp = 1000;
+	hp = 100;
 	for (int i = 0; i < numDefZones; i++) {
 		DefZones.push_back(new Perimeter(i));
 	}

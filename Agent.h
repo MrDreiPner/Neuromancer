@@ -21,7 +21,6 @@ public:
 
 private:
 	string name;
-	int points;
 	Hacker* hackTarget;
 };
 

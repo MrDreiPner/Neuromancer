@@ -1,3 +1,4 @@
-﻿  Arena.cpp
-C:\Users\porub\OneDrive\Dokumente\Visual Studio 2022\Neuromancer\Neuromancer\Arena.cpp(34,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  Hacker.cpp
+  Server.cpp
+  Generating Code...
   Neuromancer.vcxproj -> C:\Users\porub\OneDrive\Dokumente\Visual Studio 2022\Neuromancer\Neuromancer\x64\Debug\Neuromancer.exe

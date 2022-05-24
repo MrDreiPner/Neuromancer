@@ -23,7 +23,6 @@ public:
 
 private:
 	Perimeter* periTarget;
-	int points;
 	string name;
 };
 
