@@ -12,7 +12,7 @@ class Agent : public Character
 public:
 	Agent(int x);
 	~Agent();
-	void setTarget(vector<Character*>& targetList) override;
+	void setTarget(vector<Character*>& targetList);
 	Character* getTarget() override;
 	bool attack(Character& target) override;
 	Character* getTarget(int x) { return hackTarget; };

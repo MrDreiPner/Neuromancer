@@ -2,12 +2,12 @@
 
 using namespace std;
 
-void watchCore(vector<Character*> Core, int& counter);
-void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int& counter, int& critCounter);
+void watchCore(Server* Core, int& counter);
+void launchAttack(Hacker& hacker, Server& core, Arena& Arena, int& counter, int& critCounter);
 void launchHunt(Character& agent, vector<Character*>& hackTeam, vector<Character*>& core, Arena& Arena);
 
 Arena::Arena() {
-	Core.push_back(new Server(0));
+	Core = new Server();
 	for (int i = 0; i < numHaxxers; i++) {
 		hackTeam.push_back(new Hacker(i));
 	}
@@ -19,7 +19,7 @@ Arena::Arena() {
 }
 
 Arena::~Arena() {
-	delete(Core[0]);
+	delete(Core);
 	for (int i = 0; i < numHaxxers; i++) {
 		delete(hackTeam[i]);
 	}
@@ -37,28 +37,28 @@ void Arena::startBreach() {
 	int counter = 0;
 	int critCounter = 0;
 	thread CoreWatch(watchCore, ref(Core), ref(counter));
-	thread Haxxor1(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter), ref(critCounter)); x++;
-	thread Haxxor2(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter), ref(critCounter)); x++;
-	thread Haxxor3(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter), ref(critCounter)); x++;
-	thread Haxxor4(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter), ref(critCounter)); x++;
-	thread Haxxor5(launchAttack, ref(*hackTeam[x]), ref(Core), ref(*this), ref(counter), ref(critCounter)); x = 0;
-	thread Agent1(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); x++;
-	thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); 
+	thread Haxxor1(launchAttack, ref(*hackTeam[x]), ref(*Core), ref(*this), ref(counter), ref(critCounter)); x++;
+	thread Haxxor2(launchAttack, ref(*hackTeam[x]), ref(*Core), ref(*this), ref(counter), ref(critCounter)); x++;
+	thread Haxxor3(launchAttack, ref(*hackTeam[x]), ref(*Core), ref(*this), ref(counter), ref(critCounter)); x++;
+	thread Haxxor4(launchAttack, ref(*hackTeam[x]), ref(*Core), ref(*this), ref(counter), ref(critCounter)); x++;
+	thread Haxxor5(launchAttack, ref(*hackTeam[x]), ref(*Core), ref(*this), ref(counter), ref(critCounter)); x = 0;
+	//thread Agent1(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); x++;
+	//thread Agent2(launchHunt, ref(*secTeam[x]), ref(hackTeam), ref(Core), ref(*this)); 
 	CoreWatch.join();
 	Haxxor1.join();
 	Haxxor2.join();
 	Haxxor3.join();
 	Haxxor4.join();
 	Haxxor5.join();
-	Agent1.join();
-	Agent2.join();
+	//Agent1.join();
+	//Agent2.join();
 
 	int sum = 0;
 	for (int i = 0; i < numHaxxers; i++) {
 		sum += hackTeam[i]->getNum();
 	}
 	int hpSum = 500;
-	cout << "\nServer HP = " << Core[0]->getHP() << endl;
+	cout << "\nServer HP = " << Core->getHP() << endl;
 	cout << "Collective Hacker points = " << sum << "\n\nHacker Team" << endl;
 	for (int i = 0; i < numHaxxers; i++) {
 		cout << hackTeam[i]->getName() << " made " << hackTeam[i]->getNum() << " points" << endl; 
@@ -68,8 +68,8 @@ void Arena::startBreach() {
 	cout << "Number of Critical fails = " << critCounter << " dealing a cumulative " << critCounter * 5 << " HP damage" << endl;
 	hpSum += critCounter * 5;
 	cout << endl << "Server Defense" << endl;
-	cout << Core[0]->getName() << " made " << Core[0]->getPoints() << " points" << endl;
-	hpSum += Core[0]->getPoints();
+	cout << Core->getName() << " made " << Core->getPoints() << " points" << endl;
+	hpSum += Core->getPoints();
 	cout << endl << "Security Team" << endl;
 	for (int i = 0; i < numAgents; i++) {
 		cout << secTeam[i]->getName() << " made " << secTeam[i]->getNum() << " points" << endl;
@@ -82,20 +82,21 @@ void Arena::startBreach() {
 
 }
 
-void watchCore(vector<Character*> Core, int& counter) {
+void watchCore(Server* Core, int& counter) {
 	while (counter != 5) {
 		//keep looping
 	}
-	Core[0]->lockChar.lock();
-	Core[0]->setStatus(false);
-	Core[0]->lockChar.unlock();
+	Core->lockServer.lock();
+	Core->setStatus(false);
+	Core->lockServer.unlock();
 }
 
-void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int& counter, int& critCounter) {
+void launchAttack(Hacker& hacker, Server& core, Arena& Arena, int& counter, int& critCounter) {
 	random_device generator;
-	while (hacker.getStatus() && core[0]->getStatus()) {
+	while (hacker.getStatus() && core.getStatus()) {
 		hacker.lockChar.lock();
-		hacker.setTarget(core);
+		vector<Perimeter*> DefZones = core.getTarget();
+		hacker.setPeriTarget(DefZones);
 		hacker.lockChar.unlock();
 		if (generator() % 100 == 0) {
 			hacker.lockChar.lock();
@@ -108,7 +109,7 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int
 			Arena.lockArena.unlock();
 		}
 		else {
-			bool success = hacker.attack(*core[0]);
+			bool success = hacker.attack(*hacker.getPeriTarget());
 			Character* currTarg = hacker.getTarget(0);
 			Perimeter* perTarg = (Perimeter*)currTarg;
 			/*hacker.lockChar.lock();

@@ -9,8 +9,8 @@ using namespace std;
 class Character
 {
 public:
-	virtual void setTarget(vector<Character*>& targetList) = 0;
-	virtual Character* getTarget() = 0;
+	virtual void setTarget(vector<Character*>& targetList) {};
+	virtual Character* getTarget() {};
 	virtual bool  attack(Character& target) = 0;
 	virtual string getName() = 0;
 	virtual Character* getTarget(int x) { return NULL; };
@@ -26,7 +26,6 @@ public:
 	mutex lockChar;
 
 protected:
-	Character* target;
 	int hp = 0;
 	int attVal = 0;
 	bool active = true;

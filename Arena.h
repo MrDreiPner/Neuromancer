@@ -23,7 +23,7 @@ public:
 private:
 	std::vector<Character*> hackTeam;
 	std::vector<Character*> secTeam;
-	std::vector<Character*> Core;
+	Server* Core;
 	int numHaxxers = 5;
 	int numAgents = 2;
 	int attacksLaunched = 0;

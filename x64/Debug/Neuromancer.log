@@ -1,4 +1,28 @@
-﻿  Hacker.cpp
+﻿  Agent.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
+  Arena.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Arena.cpp(34,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Arena.cpp(99,32): error C2664: 'void Character::setPeriTarget(unknown-type &)': cannot convert argument 1 from 'std::vector<Perimeter *,std::allocator<Perimeter *>>' to 'unknown-type &'
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,15): message : see declaration of 'Character::setPeriTarget'
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Arena.cpp(112,40): error C2676: binary '[': 'Server' does not define this operator or a conversion to a type acceptable to the predefined operator
+  Character.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
+  Hacker.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Hacker.cpp(22,36): error C2084: function 'Perimeter *Hacker::getPeriTarget(void)' already has a body
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Hacker.h(19): message : see previous definition of 'getPeriTarget'
+  Perimeter.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
   Server.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
+  Source.cpp
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,36): error C2065: 'Perimeter': undeclared identifier
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\Character.h(13,46): error C2059: syntax error: '>'
   Generating Code...
-  Neuromancer.vcxproj -> C:\Users\porub\OneDrive\Dokumente\Visual Studio 2022\Neuromancer\Neuromancer\x64\Debug\Neuromancer.exe

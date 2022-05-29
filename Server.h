@@ -7,23 +7,28 @@
 
 using namespace std;
 
-class Server : public Character
+class Server
 {
 public:
-	Server(int x);
+	Server();
 	~Server();
-	void setTarget(vector<Character*>& targetList) override;
-	Character* getTarget() override;
-	bool attack(Character& target) override;
 	int getNum() { return numDefZones; };
 	int getPoints() { return points; };
 	void setPoints(int x) { points = x; };
-	Character* getTarget(int x) { return DefZones[x]; };
+	int getHP() { return hp; };
+	void setHP(int x) { hp = x; };
+	bool getStatus() { return active; };
+	void setStatus(bool x) { active = x; };
+	vector<Perimeter*> getTarget() { return DefZones; };
 	string getName() { return name; };
+	mutex lockServer;
 
 private:
+	int hp;
+	int points;
 	string name;
+	bool active = true;
 	int numDefZones = 5;
-	vector<Character*> DefZones;
+	vector<Perimeter*> DefZones;
 };
 

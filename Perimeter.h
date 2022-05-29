@@ -21,7 +21,7 @@ public:
 	int getID() { return ID; };
 	string getName() { return name; };
 	int getNameID() { return nameID; };
-	void setTarget(vector<Character*>& targetList) override;
+	void setTarget(vector<Character*>& targetList);
 	Character* getTarget() override;
 	bool  attack(Character& target) override;
 

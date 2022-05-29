@@ -14,10 +14,9 @@ class Hacker : public Character
 public:
 	Hacker(int x);
 	~Hacker();
-	void setTarget(vector<Character*>& targetList) override;
-	Character* getTarget() override;
+	void setPeriTarget(vector<Perimeter*>& targetList);
 	bool attack(Character& target) override;
-	Character* getTarget(int x) { return periTarget; };
+	Perimeter* getPeriTarget() { return periTarget; };
 	int getNum() { return points; };
 	string getName() { return name; };
 
