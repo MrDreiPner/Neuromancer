@@ -1,1 +1,2 @@
 C:\Users\porub\OneDrive\Dokumente\Visual Studio 2022\Neuromancer\Neuromancer\x64\Debug\Neuromancer.exe
+C:\Users\Matus\Documents\VS_Code\Neuromancer\Neuromancer\x64\Debug\Neuromancer.exe

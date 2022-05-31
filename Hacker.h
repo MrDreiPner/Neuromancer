@@ -12,7 +12,7 @@ using namespace std;
 class Hacker : public Character
 {
 public:
-	Hacker(int x);
+	Hacker(int x, int tactic, vector<Character*>& Core);
 	~Hacker();
 	void setTarget(vector<Character*>& targetList) override;
 	Character* getTarget() override;
@@ -20,6 +20,7 @@ public:
 	Character* getTarget(int x) { return periTarget; };
 	int getNum() { return points; };
 	string getName() { return name; };
+	void checkLeader(vector<Character*>& hackTeam);
 
 private:
 	Perimeter* periTarget;

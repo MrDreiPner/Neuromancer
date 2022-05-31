@@ -1,8 +1,9 @@
 #include "Agent.h"
 
-Agent::Agent(int x) {
+Agent::Agent(int x, int tactic) {
 	std::string nameArr[] = { "Smith", "Walter" };
 	name = nameArr[x];
+	strategy = tactic;
 	std::cout << name << " the Agent has been created!" << std::endl;
 }
 

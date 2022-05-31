@@ -19,6 +19,9 @@ public:
 	Arena();
 	~Arena();
 	void startBreach();
+	std::vector<Character*>* getHackTeam() { return &hackTeam; };
+	std::vector<Character*>* getSecTeam() { return &secTeam; };
+	std::vector<Character*>* getCore() { return &Core; };
 	mutex lockArena;
 private:
 	std::vector<Character*> hackTeam;
@@ -27,5 +30,6 @@ private:
 	int numHaxxers = 5;
 	int numAgents = 2;
 	int attacksLaunched = 0;
+	char teamMode = 0;
 };
 

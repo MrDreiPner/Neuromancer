@@ -10,7 +10,7 @@ using namespace std;
 class Agent : public Character
 {
 public:
-	Agent(int x);
+	Agent(int x, int tactic);
 	~Agent();
 	void setTarget(vector<Character*>& targetList) override;
 	Character* getTarget() override;

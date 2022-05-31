@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include <cassert>
 
 using namespace std;
 
@@ -17,6 +18,9 @@ public:
 	virtual int getNum() { return NULL; };
 	virtual void setPoints(int x) { points = x; };
 	virtual int getPoints() { return points; };
+	virtual void checkLeader(vector<Character*>& hackTeam) {};
+	bool getLeaderStatus() { return isLeader; };
+	void setLeaderStatus(bool x) { isLeader = x; };
 	int getHP() { return hp; };
 	void setHP(int x) { hp = x; };
 	int getAttVal() { return attVal; };
@@ -26,10 +30,13 @@ public:
 	mutex lockChar;
 
 protected:
-	Character* target;
+	//Character* leader = NULL;
+	bool isLeader = false;
+	bool leaderStatus = false;
 	int hp = 0;
 	int attVal = 0;
 	bool active = true;
 	int points = 0;
+	int strategy = 0;
 };
 

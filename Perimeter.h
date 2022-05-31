@@ -9,6 +9,9 @@ using namespace std;
 class Perimeter : public Character
 {
 public:
+	virtual void setTarget(vector<Character*>& targetList) override {};
+	virtual Character* getTarget() override { return NULL; };
+	virtual bool  attack(Character& target) override { return false; };
 	Perimeter(int x);
 	virtual ~Perimeter();
 	int getDef() { return defense; };
@@ -21,9 +24,6 @@ public:
 	int getID() { return ID; };
 	string getName() { return name; };
 	int getNameID() { return nameID; };
-	void setTarget(vector<Character*>& targetList) override;
-	Character* getTarget() override;
-	bool  attack(Character& target) override;
 
 private:
 	int defense = 20;
