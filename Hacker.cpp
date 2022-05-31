@@ -23,15 +23,17 @@ Hacker::Hacker(int x, int tactic, vector<Character*>& Core) {
 		}
 	}
 	else {
+		//Leader gets declared
 		if (x == 0) {
 			isLeader = true;
-			tactic = 3;
+			wasLeader = true;
 			//hp = 1;
-			setTarget(Core);
+			tactic = 3;
 			cout << name << " is the Leader!" << endl;
 		}
-	}
+	};
 	strategy = tactic;
+	setTarget(Core);
 	std::cout << name << " the Hacker has been created!" << std::endl;
 }
 
@@ -54,7 +56,7 @@ void Hacker::setTarget(std::vector<Character*>& targetList) {
 		}
 		//targetList[0]->lockChar.unlock();
 	}
-	else if (strategy == 2 || isLeader == true) {
+	else if (periTarget == NULL || strategy == 2) {
 		random_device generator;
 		periTarget = (Perimeter*)targetList[0]->getTarget(generator() % 5);
 		
@@ -73,13 +75,12 @@ void Hacker::checkLeader(vector<Character*>& hackTeam) {
 		int leaderCount = 0;
 		for (int i = 0; i < 5; i++) {
 			//if(hackTeam[i] != this)
-			hackTeam[i]->lockChar.lock();
+			//hackTeam[i]->lockChar.lock();
 			//cout << hackTeam[i]->getName() << " is locked" << endl;
 		}
 		for (int i = 0; i < 5; i++) {
 			if (hackTeam[i]->getLeaderStatus() == true) {
 				leaderCount++;
-				leaderStatus = true;
 				periTarget = (Perimeter*)hackTeam[i]->getTarget();
 				//cout << hackTeam[i]->getName() << " is the leader of " << name << " | PeriTarget is Perimeter " << periTarget->getNameID() << endl;
 				//assert(!leaderCount > 1, "Too many leaders");
@@ -87,6 +88,7 @@ void Hacker::checkLeader(vector<Character*>& hackTeam) {
 		}
 		if (leaderCount < 1) {
 			isLeader = true;
+			wasLeader = true;
 			strategy = 3;
 			//cout << "\n" << name << " is new Leader!" << endl;
 		}
@@ -94,7 +96,7 @@ void Hacker::checkLeader(vector<Character*>& hackTeam) {
 		for (int i = 4; i >= 0; i--) {
 			//cout << hackTeam[i]->getName() << " is unlocked" << endl;
 			//if (hackTeam[i] != this)
-			hackTeam[i]->lockChar.unlock();
+			//hackTeam[i]->lockChar.unlock();
 		}
 	}
 }

@@ -23,7 +23,7 @@ public:
 	void checkLeader(vector<Character*>& hackTeam);
 
 private:
-	Perimeter* periTarget;
+	Perimeter* periTarget = NULL;
 	string name;
 };
 

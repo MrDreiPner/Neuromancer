@@ -20,6 +20,7 @@ public:
 	virtual int getPoints() { return points; };
 	virtual void checkLeader(vector<Character*>& hackTeam) {};
 	bool getLeaderStatus() { return isLeader; };
+	bool getFormerLeaderStatus() { return wasLeader; };
 	void setLeaderStatus(bool x) { isLeader = x; };
 	int getHP() { return hp; };
 	void setHP(int x) { hp = x; };
@@ -32,7 +33,7 @@ public:
 protected:
 	//Character* leader = NULL;
 	bool isLeader = false;
-	bool leaderStatus = false;
+	bool wasLeader = false;
 	int hp = 0;
 	int attVal = 0;
 	bool active = true;

@@ -77,6 +77,10 @@ void Arena::startBreach() {
 	cout << "\nServer HP = " << Core[0]->getHP() << endl;
 	cout << "Collective Hacker points = " << pointSum << "\n\nHacker Team" << endl;
 	for (int i = 0; i < numHaxxers; i++) {
+		if (hackTeam[i]->getLeaderStatus())
+			cout << "LEADER ";
+		else if(hackTeam[i]->getFormerLeaderStatus())
+			cout << "Ex-LEADER ";
 		cout << hackTeam[i]->getName() << " made " << hackTeam[i]->getNum() << " points" << endl; 
 		cout << "HP left = " << hackTeam[i]->getHP() << endl;
 		hpSum -= 100 - hackTeam[i]->getHP();
@@ -114,8 +118,8 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int
 	while (hacker.getStatus() && core[0]->getStatus()) {
 		hacker.lockChar.lock();
 		hacker.setTarget(core);
-		hacker.lockChar.unlock();
 		hacker.checkLeader(*hackTeam);
+		hacker.lockChar.unlock();
 		/*Arena.lockArena.lock();
 		if (hacker.getLeaderStatus())
 			cout << hacker.getName() << " is the current Leader!" << endl;
@@ -135,7 +139,7 @@ void launchAttack(Character& hacker, vector<Character*>& core, Arena& Arena, int
 			bool success = hacker.attack(*core[0]);
 		}
 		int hackerHP = hacker.getHP();
-		if ((hackerHP % 10 == 0) && hackerHP != 100) {
+		if (hackerHP % 10 == 0 && hackerHP != 100) {
 			hacker.lockChar.lock();
 			hacker.setAttVal(hacker.getAttVal() - 2);
 			hacker.lockChar.unlock();
