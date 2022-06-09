@@ -1,2 +1,2 @@
-PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.31.31103:TargetPlatformVersion=10.0.19041.0:
-Debug|x64|C:\Users\porub\OneDrive\Dokumente\Visual Studio 2022\Neuromancer\Neuromancer\|
+PlatformToolSet=v143:VCToolArchitecture=Native64Bit:VCToolsVersion=14.31.31103:TargetPlatformVersion=10.0.19041.0:VcpkgTriplet=x64-windows:
+Debug|x64|C:\Users\Matus\Documents\VS_Code\Neuromancer\|
